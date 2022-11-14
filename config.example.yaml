@@ -1,5 +1,6 @@
 http:
-  addr: 80
+  addr: ":80"
+  debug: true
 
 line:
   secret:

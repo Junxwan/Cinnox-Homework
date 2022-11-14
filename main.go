@@ -1,11 +1,10 @@
 package main
 
 import (
+	"Cinnox-Homework/api"
 	"Cinnox-Homework/cmd"
 	"Cinnox-Homework/notify"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func main() {
@@ -15,18 +14,11 @@ func main() {
 
 	line, err := notify.New(cmd.Conf.Line)
 	if err != nil {
-		panic(line)
+		panic(err)
 	}
 
-	g := gin.New()
-
-	g.POST("", func(c *gin.Context) {
-		if err := line.ConsumeMessage(c.Request); err != nil {
-			panic(err)
-		}
-
-		c.Status(http.StatusOK)
-	})
-
-	g.Run(cmd.Conf.Http.Addr)
+	server := api.New(&cmd.Conf.Http, line)
+	if err := server.Run(); err != nil {
+		panic(err)
+	}
 }

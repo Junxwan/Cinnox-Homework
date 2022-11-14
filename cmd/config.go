@@ -15,7 +15,8 @@ type Config struct {
 }
 
 type Http struct {
-	Addr string
+	Addr  string
+	Debug bool
 }
 
 type Line struct {

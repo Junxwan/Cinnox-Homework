@@ -25,7 +25,7 @@ func New(conf cmd.Line) (*Bot, error) {
 }
 
 // 處理Line message Webhook
-func (b *Bot) ConsumeMessage(req *http.Request) error {
+func (b *Bot) Webhook(req *http.Request) error {
 	events, err := b.Api.ParseRequest(req)
 
 	if err != nil {
