@@ -5,3 +5,12 @@ http:
 line:
   secret:
   token:
+
+databases:
+  connections: mongodb
+  host: localhost
+  port: 27017
+  databases: example
+  username: root
+  password: root
+  timeout: 5s

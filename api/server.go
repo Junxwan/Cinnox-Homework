@@ -2,6 +2,7 @@ package api
 
 import (
 	"Cinnox-Homework/cmd"
+	"Cinnox-Homework/model"
 	"Cinnox-Homework/notify"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -11,9 +12,10 @@ type Server struct {
 	conf   *cmd.Http
 	http   *gin.Engine
 	notify notify.INotify
+	model  *model.DB
 }
 
-func New(conf *cmd.Http, notify notify.INotify) *Server {
+func New(conf *cmd.Http, notify notify.INotify, model *model.DB) *Server {
 	if !conf.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -22,6 +24,7 @@ func New(conf *cmd.Http, notify notify.INotify) *Server {
 		conf:   conf,
 		http:   gin.New(),
 		notify: notify,
+		model:  model,
 	}
 }
 

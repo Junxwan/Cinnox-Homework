@@ -5,13 +5,15 @@ import (
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"strings"
+	"time"
 )
 
 var Conf *Config
 
 type Config struct {
-	Http Http
-	Line Line
+	Http      Http
+	Line      Line
+	Databases Databases
 }
 
 type Http struct {
@@ -22,6 +24,16 @@ type Http struct {
 type Line struct {
 	Secret string
 	Token  string
+}
+
+type Databases struct {
+	Connections string
+	Host        string
+	Port        int
+	Databases   string
+	Username    string
+	Password    string
+	Timeout     time.Duration
 }
 
 func NewConfig(path string) (*Config, error) {
