@@ -25,7 +25,7 @@ func main() {
 			panic(err)
 		}
 
-		c.JSON(http.StatusOK, gin.H{})
+		c.Status(http.StatusOK)
 	})
 
 	g.Run(cmd.Conf.Http.Addr)
