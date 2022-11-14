@@ -2,21 +2,18 @@ package api
 
 import (
 	"Cinnox-Homework/cmd"
+	"Cinnox-Homework/notify"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type INotify interface {
-	Webhook(req *http.Request) error
-}
-
 type Server struct {
 	conf   *cmd.Http
 	http   *gin.Engine
-	notify INotify
+	notify notify.INotify
 }
 
-func New(conf *cmd.Http, notify INotify) *Server {
+func New(conf *cmd.Http, notify notify.INotify) *Server {
 	if !conf.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
