@@ -21,7 +21,7 @@ func main() {
 		panic(err)
 	}
 
-	line, err := notify.New(cmd.Conf.Line)
+	line, err := notify.New(cmd.Conf.Line, db)
 	if err != nil {
 		panic(err)
 	}
