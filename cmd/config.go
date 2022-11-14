@@ -15,7 +15,7 @@ type Config struct {
 }
 
 type Http struct {
-	Port int
+	Addr string
 }
 
 type Line struct {

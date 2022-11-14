@@ -26,6 +26,6 @@ func init() {
 
 func initConfig() {
 	if _, err := NewConfig(configPath); err != nil {
-		panic(fmt.Sprintf("new config %v", err))
+		panic(fmt.Sprintf("new config error: %v", err))
 	}
 }
