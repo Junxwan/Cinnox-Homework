@@ -38,9 +38,14 @@ func NewDB(ctx context.Context, conf cmd.Databases) (*DB, error) {
 	}, err
 }
 
+// 關閉連線
+func (db *DB) Close(ctx context.Context) error {
+	return db.client.Disconnect(ctx)
+}
+
 type User struct {
 	ID      primitive.ObjectID `bson:"_id"`
-	UserId  string             `bson:"restaurant_id"`
+	UserId  string             `bson:"user_id"`
 	Name    string
 	Created time.Time
 }
@@ -75,7 +80,38 @@ func (db *DB) CreateMessage(userId, message string, created time.Time) error {
 	return err
 }
 
-// 關閉連線
-func (db *DB) Close(ctx context.Context) error {
-	return db.client.Disconnect(ctx)
+type IQueryMessage interface {
+	List(page, limit int64) ([]MessageModel, error)
+	FindByUser(userId string, page, limit int64) ([]MessageModel, error)
+}
+
+type MessageModel struct {
+	UserId  string    `json:"user_id" bson:"user_id"`
+	Message string    `json:"message"`
+	Created time.Time `json:"created"`
+}
+
+// 訊息列表
+func (db *DB) List(page, limit int64) ([]MessageModel, error) {
+	opts := options.Find().SetSort(bson.D{{"created", -1}})
+	if page != 0 {
+		page -= 1
+	}
+
+	opts.SetSkip(page * limit)
+	opts.SetLimit(limit)
+	cursor, err := db.database.Collection("message").Find(context.TODO(), bson.D{}, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []MessageModel
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+func (db *DB) FindByUser(userId string, page, limit int64) ([]MessageModel, error) {
+	return nil, nil
 }
