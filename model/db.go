@@ -93,6 +93,14 @@ type MessageModel struct {
 
 // 訊息列表
 func (db *DB) List(page, limit int64) ([]MessageModel, error) {
+	return db.list(bson.D{}, page, limit)
+}
+
+func (db *DB) FindByUser(userId string, page, limit int64) ([]MessageModel, error) {
+	return db.list(bson.M{"user_id": userId}, page, limit)
+}
+
+func (db *DB) list(filter interface{}, page, limit int64) ([]MessageModel, error) {
 	opts := options.Find().SetSort(bson.D{{"created", -1}})
 	if page != 0 {
 		page -= 1
@@ -100,7 +108,7 @@ func (db *DB) List(page, limit int64) ([]MessageModel, error) {
 
 	opts.SetSkip(page * limit)
 	opts.SetLimit(limit)
-	cursor, err := db.database.Collection("message").Find(context.TODO(), bson.D{}, opts)
+	cursor, err := db.database.Collection("message").Find(context.TODO(), filter, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -110,8 +118,4 @@ func (db *DB) List(page, limit int64) ([]MessageModel, error) {
 		return nil, err
 	}
 	return results, nil
-}
-
-func (db *DB) FindByUser(userId string, page, limit int64) ([]MessageModel, error) {
-	return nil, nil
 }
