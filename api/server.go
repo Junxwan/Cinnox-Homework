@@ -148,7 +148,11 @@ func (s *Server) list(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, models)
+	if models == nil {
+		c.JSON(http.StatusOK, []interface{}{})
+	} else {
+		c.JSON(http.StatusOK, models)
+	}
 }
 
 type liseMessageByUserReq struct {
