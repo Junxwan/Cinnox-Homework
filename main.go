@@ -7,6 +7,10 @@ import (
 	"Cinnox-Homework/notify"
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -29,5 +33,22 @@ func main() {
 	server := api.New(&cmd.Conf.Http, line, db)
 	if err := server.Run(); err != nil {
 		panic(err)
+	}
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
+	for {
+		s := <-c
+		log.Printf("goim-comet get a signal %s", s.String())
+		switch s {
+		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
+			if err := db.Close(context.Background()); err != nil {
+				log.Printf("close mongodb error: %v", err)
+			}
+			return
+		case syscall.SIGHUP:
+		default:
+			return
+		}
 	}
 }

@@ -18,7 +18,7 @@ func New(conf cmd.Line, model IModel) (*Bot, error) {
 	if err != nil {
 		return nil, fmt.Errorf("new line bot error: %v", err)
 	}
-
+	
 	bot := new(Bot)
 	bot.Api = line
 	bot.model = model
