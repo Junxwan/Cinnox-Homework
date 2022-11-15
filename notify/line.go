@@ -46,6 +46,24 @@ func (b *Bot) Webhook(req *http.Request) error {
 	return nil
 }
 
+// 針對某user發送訊息
+func (b *Bot) Send(userId, message string) error {
+	_, err := b.Api.PushMessage(userId, linebot.NewTextMessage(message)).Do()
+	return err
+}
+
+// 針對多名user發送訊息
+func (b *Bot) Sends(userIds []string, message string) error {
+	_, err := b.Api.Multicast(userIds, linebot.NewTextMessage(message)).Do()
+	return err
+}
+
+// 廣播訊息
+func (b *Bot) Broadcast(message string) error {
+	_, err := b.Api.BroadcastMessage(linebot.NewTextMessage(message)).Do()
+	return err
+}
+
 // 處理文字
 func (b *Bot) message(event *linebot.Event) error {
 	switch message := event.Message.(type) {

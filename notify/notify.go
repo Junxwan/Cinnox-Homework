@@ -7,6 +7,9 @@ import (
 
 type INotify interface {
 	Webhook(req *http.Request) error
+	Send(userId, message string) error
+	Sends(userIds []string, message string) error
+	Broadcast(message string) error
 }
 
 type IModel interface {
